@@ -1,19 +1,23 @@
+import { urlOptins } from "../utils/utils";
+
 export const apiFilmsSort = (token, sort = 1, currentPage) => {
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   };
   try {
+	console.log(`tokenSv`, token)
+    const { movie, ru, top_rated, popular, basisURL } = urlOptins;
     const getSortFilms = async () => {
-      let request = "https://api.themoviedb.org/3/movie/";
+      let request = `${basisURL}/${movie}/`;
 
       request +=
         sort === 1
-          ? `popular?language=ru-RU&page=${currentPage}`
-          : `top_rated?language=ru-RU&page=${currentPage}`;
+          ? `${popular}?${ru}-RU&page=${currentPage}`
+          : `${top_rated}?${ru}-RU&page=${currentPage}`;
       const data = await fetch(request, options);
       const sortFilms = await data.json();
       return sortFilms;

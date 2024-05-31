@@ -1,70 +1,30 @@
-import React, { useReducer } from "react";
+import React, { useState } from "react";
 import Main from "./components/Main/Main";
 import { Route, Routes } from "react-router-dom";
 import ActiveFilm from "./components/ActiveFilm/ActiveFilm";
-import { FILTERS__TYPE } from "./utils/utils";
-import {
-  IsAllActiveContext,
-  IsAllActiveDispatchContext,
-} from "./contexts/isActiveContext";
+import { FiltersProvider } from "./contexts/isActiveContext";
+
+import { GetToken } from "./components/Authorization/GetToken";
+import { PostToken } from "./components/Authorization/PostToken";
+import StartingPage from "./components/startingPage/StartPage";
+import { SetTokenContext, TokenContext } from "./contexts/tokenContext";
 
 export default function App() {
-  const [isActive, dispatch] = useReducer(filtersReducer, {
-    isActiveSelect: 1,
-    isActiveSlider: [1905, 2005],
-    isActiveGenres: [],
-    isActiveCurrentPage: 1,
-    isActiveTotalPages: 1,
-    isActiveIdFilm: 0,
-  });
+  const [token, setToken] = useState("");
 
   return (
-    <>
-      <IsAllActiveContext.Provider value={isActive}>
-        <IsAllActiveDispatchContext.Provider value={dispatch}>
+    <TokenContext.Provider value={token}>
+      <SetTokenContext.Provider value={setToken}>
+        <FiltersProvider>
           <Routes>
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={<StartingPage />} />
+            <Route path="/main" element={<Main />} />
             <Route path="/activeFilm" element={<ActiveFilm />} />
+            <Route path="/getToken" element={<GetToken />} />
+            <Route path="/getPost" element={<PostToken />} />
           </Routes>
-        </IsAllActiveDispatchContext.Provider>
-      </IsAllActiveContext.Provider>
-    </>
+        </FiltersProvider>
+      </SetTokenContext.Provider>
+    </TokenContext.Provider>
   );
-}
-
-function filtersReducer(isActive, action) {
-  switch (action.type) {
-    case FILTERS__TYPE.resetFilters: {
-      return {
-        isActiveSelect: 0,
-        isActiveSlider: [1905, 2005],
-        isActiveGenres: [],
-        isActiveCurrentPage: 1,
-        isActiveIdFilm: 0,
-      };
-    }
-    case FILTERS__TYPE.updateSelect: {
-      return { ...isActive, isActiveSelect: action.indexSelect };
-    }
-    case FILTERS__TYPE.updateSlider: {
-      return { ...isActive, isActiveSlider: action.updateSlider };
-    }
-    case FILTERS__TYPE.updateAutocomplete: {
-      return { ...isActive, isActiveGenres: action.updateAutocomplete };
-    }
-    case FILTERS__TYPE.updateCurrentPage: {
-      return { ...isActive, isActiveCurrentPage: action.value };
-    }
-    case FILTERS__TYPE.updateTotalPage: {
-      const totalPages = action.totalPages >= 500 ? 500 : action.totalPages;
-      return { ...isActive, isActiveTotalPages: totalPages };
-    }
-    case FILTERS__TYPE.isActiveIdFilm: {
-      return { ...isActive,  isActiveIdFilm: action.id};
-    }
-
-    default: {
-      console.warn("Unknow action type...");
-    }
-  }
 }

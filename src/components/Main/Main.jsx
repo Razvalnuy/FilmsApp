@@ -1,16 +1,15 @@
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { TokenContext } from "../../contexts/tokenContext";
-import { FILTERS__TYPE } from "../../utils/utils";
 import {
   IsAllActiveContext,
   IsAllActiveDispatchContext,
 } from "../../contexts/isActiveContext";
-import { Box } from "@mui/material";
-import Filters from "../Filters/Filters";
-import MultiActionAreaCard from "../FilmCard/FilmCard";
-import Header from "../Header/Header";
-
+import {TokenContext } from "../../contexts/tokenContext";
 import { apiFilmsSort } from "../../fetchs/apiFilmsSort";
+import { FILTERS__TYPE } from "../../utils/utils";
+import MultiActionAreaCard from "../FilmCard/FilmCard";
+import Filters from "../Filters/Filters";
+import Header from "../Header/Header";
 
 export default function Main() {
   const [filmsList, setFilmsList] = useState([]);
@@ -42,9 +41,8 @@ export default function Main() {
 
   return (
     <>
+      <Header />
       <Box>
-        <Header sx={{ position: "fixed" }} />
-
         <Box
           sx={{
             marginTop: "100px",

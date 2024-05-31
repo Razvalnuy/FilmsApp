@@ -1,20 +1,18 @@
-import { urlOptins } from "../utils/utils";
-
 export const fetchGenres = async (token) => {
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: token,
     },
   };
   try {
-    const { genre, movie, ru, basisURL, list } = urlOptins;
     const response = await fetch(
-      `${basisURL}/${genre}/${movie}/${list}?${ru}`,
+      "https://api.themoviedb.org/3/genre/movie/list?language=ru",
       options
     );
     const data = await response.json();
+
 
     return data;
   } catch (err) {

@@ -20,11 +20,25 @@ import { apiDetailsFilm } from "../../fetchs/apiDetailsFilm";
 import { useContext, useEffect, useState } from "react";
 import { TokenContext } from "../../contexts/tokenContext";
 import { IsAllActiveContext } from "../../contexts/isActiveContext";
+import { imgUtils } from "../../utils/utils";
 
 export default function ActiveFilm() {
   const token = useContext(TokenContext);
   const [detailsFilm, setDetailsFilm] = useState({});
   const { isActiveIdFilm } = useContext(IsAllActiveContext);
+  const {
+    title,
+    release_date,
+    vote_average,
+    overview,
+    runtime,
+    budget,
+    production_countries,
+    production_companies,
+    genres,
+    origin_country,
+    popularity,
+  } = detailsFilm;
 
   useEffect(() => {
     try {
@@ -38,16 +52,11 @@ export default function ActiveFilm() {
     }
   }, [isActiveIdFilm, token]);
 
-  const imgURL = `https://image.tmdb.org/t/p/w500${
-    detailsFilm.poster_path || detailsFilm.backdrop_path
-  }`;
-
-  async function getDetails() {}
-  getDetails();
+  const imgURL = imgUtils(detailsFilm);
 
   return (
     <Box>
-      <Header titleFilm={detailsFilm.title} sx={{ position: "fixed" }} />
+      <Header titleFilm={title} sx={{ position: "fixed" }} />
       <Container>
         <Paper
           sx={{
@@ -59,8 +68,8 @@ export default function ActiveFilm() {
             <CardMedia
               component="img"
               image={imgURL}
-              alt={detailsFilm.title}
-              sx={{ width: 400, height: "100%" }}
+              alt={title}
+              sx={{ width: 500, height: "100%" }}
             />
 
             <Box sx={{ paddingLeft: "24px" }}>
@@ -72,7 +81,7 @@ export default function ActiveFilm() {
                 }}
               >
                 <Typography sx={{ fontWeight: 500 }} variant="h2">
-                  {detailsFilm.title}
+                  {title}
                 </Typography>
 
                 <IconButton sx={{ marginLeft: "25px" }}>
@@ -80,7 +89,7 @@ export default function ActiveFilm() {
                 </IconButton>
               </Box>
               <Box>
-                <Link to="/">
+                <Link to="/main">
                   <IconButton sx={{ marginTop: "25px" }}>
                     <ArrowBack fontSize="large" />
                   </IconButton>
@@ -90,27 +99,28 @@ export default function ActiveFilm() {
                 variant="h6"
                 sx={{ paddingLeft: "20px", paddingBottom: "10px" }}
               >
-                Дата выхода: {detailsFilm.release_date}
+                Дата выхода: {release_date}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ paddingLeft: "20px", paddingBottom: "10px" }}
               >
-                Рейтинг: {detailsFilm.vote_average?.toFixed(0)}
+                Рейтинг: {vote_average?.toFixed(0)}
               </Typography>
-              <Typography variant="h6" sx={{ paddingLeft: "20px" }}>
-                {detailsFilm.overview}
+              <Typography
+                variant="h6"
+                sx={{
+                  paddingLeft: "20px",
+                  overflowY: "scroll",
+                  maxHeight: "250px",
+                }}
+              >
+                {overview}
               </Typography>
-              {/* //todo Допилить актеров ) */}
-              {/* <List sx={{ paddingLeft: "20px", marginTop: "10px" }}>
-                <Typography variant="h5">Актеры</Typography>
-                <Typography variant="h6">Киану Ривз</Typography>
-                <Typography variant="h6">Лоренс Фишбёрн</Typography>
-                <Typography variant="h6">Кэрри-Энн Мосс</Typography>
-                <Typography variant="h6">Хьюго Уивинг</Typography>
-              </List> */}
-              {/* //todo Посмотреть про списки в MUI */}
-              <List>
+
+              <List
+                sx={{ marginTop: "30px", position: "fixed", maxWidth: "250px" }}
+              >
                 <ListItem>
                   <Table>
                     <TableHead>
@@ -128,36 +138,28 @@ export default function ActiveFilm() {
 
                     <TableBody>
                       <TableRow>
-                        <TableCell>{detailsFilm.origin_country}</TableCell>
+                        <TableCell>{origin_country}</TableCell>
+                        <TableCell>{release_date?.slice(0, 4)}</TableCell>
                         <TableCell>
-                          {detailsFilm.release_date?.slice(0, 4)}
-                        </TableCell>
-                        <TableCell>
-                          {detailsFilm.genres
-                            ? detailsFilm.genres.map(
-                                (genre) => genre.name + " "
-                              )
+                          {genres
+                            ? genres.map((genre) => genre.name + " ")
                             : ""}
                         </TableCell>
                         <TableCell>
-                          {detailsFilm.production_companies
-                            ? detailsFilm.production_companies.map(
-                                (companies) => companies.name + " . "
-                              )
+                          {production_companies
+                            ? production_companies[0].name
                             : ""}
                         </TableCell>
                         <TableCell>
-                          {detailsFilm.production_countries
-                            ? detailsFilm.production_countries.map(
+                          {production_countries
+                            ? production_countries.map(
                                 (countries) => countries.iso_3166_1 + " "
                               )
                             : ""}
                         </TableCell>
-                        <TableCell>${detailsFilm.budget} </TableCell>
-                        <TableCell>
-                          {detailsFilm.popularity?.toFixed(1)}
-                        </TableCell>
-                        <TableCell>{detailsFilm.runtime} мин. </TableCell>
+                        <TableCell>${budget} </TableCell>
+                        <TableCell>{popularity?.toFixed(1)}</TableCell>
+                        <TableCell>{runtime} мин. </TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>

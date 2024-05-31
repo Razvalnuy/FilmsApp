@@ -1,5 +1,8 @@
 import { createContext } from "react";
 
-export const TokenContext = createContext(
-  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3M2M1ZDI3Y2UzMGNhYjJiYWEwYTBiN2MxMGM2NDc2YSIsInN1YiI6IjY2M2JmNjQ3MWEzZDAyYTE0MDc4MDUwMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2grBVV_YHSHRbl1ouPqOvXu5w3-HV5FjJ2Y5HMbXy0s"
-);
+const TokenContext = createContext(null);
+const SetTokenContext = createContext(null);
+
+const TOKENCONTEXT = createContext(null);
+
+export { TokenContext, SetTokenContext, TOKENCONTEXT };
