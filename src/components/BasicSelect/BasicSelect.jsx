@@ -10,7 +10,7 @@ import {
 import { FILTERS__TYPE } from "../../utils/utils";
 
 export default function BasicSelect() {
-  const sort = ["Популярности", "Рейтинг"];
+  const sort = ["Популярности", "Рейтинг", "Избранные"];
   const isActive = useContext(IsAllActiveContext);
   const dispatch = useContext(IsAllActiveDispatchContext);
 
@@ -20,10 +20,14 @@ export default function BasicSelect() {
       type: FILTERS__TYPE.updateSelect,
       indexSelect: index,
     });
-	 dispatch({
-		type: FILTERS__TYPE.updateCurrentPage,
-		value: 1,
-	 });
+    dispatch({
+      type: FILTERS__TYPE.updateCurrentPage,
+      value: 1,
+    });
+    dispatch({
+      type: FILTERS__TYPE.isActiveSearch,
+      search: "",
+    });
   };
 
   return (
@@ -38,6 +42,7 @@ export default function BasicSelect() {
       >
         <MenuItem value={1}>{sort[0]}</MenuItem>
         <MenuItem value={2}>{sort[1]}</MenuItem>
+        <MenuItem value={3}>{sort[2]}</MenuItem>
       </Select>
     </FormControl>
   );

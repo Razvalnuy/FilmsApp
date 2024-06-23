@@ -10,20 +10,23 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { FILTERS__TYPE } from "../../utils/utils";
 import { fetchGenres } from "../../fetchs/apiGenres";
-import { TokenContext } from "../../contexts/tokenContext";
+import Cookies from "js-cookie";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function CheckboxesTags() {
-  const token = useContext(TokenContext);
+  const token = JSON.parse(Cookies.get("token"));
+
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     try {
       const getGenres = async () => {
         const allGenres = await fetchGenres(token);
-        setGenres(allGenres.genres);
+        if (allGenres) {
+          setGenres(allGenres.genres);
+        }
       };
       getGenres();
     } catch (err) {

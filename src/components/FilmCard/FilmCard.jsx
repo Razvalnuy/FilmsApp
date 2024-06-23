@@ -1,31 +1,37 @@
-import React, { useContext } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import StarOutline from "@mui/icons-material/StarOutline";
-
-import { Box, CardActionArea, CardActions, IconButton } from "@mui/material";
-
+import { Box, CardActionArea, CardActions, Checkbox } from "@mui/material";
 import { Link } from "react-router-dom";
-import { IsAllActiveDispatchContext } from "../../contexts/isActiveContext";
-import { FILTERS__TYPE, imgUtils } from "../../utils/utils";
+import { imgUtils } from "../../utils/utils";
+import { apiAddFavorite } from "../../fetchs/apiAddFavorite";
+import Cookies from "js-cookie";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
-export default function MultiActionAreaCard({ title, rating, image, id }) {
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+export default function MultiActionAreaCard({
+  title,
+  rating,
+  image,
+  id,
+  checked,
+  onChangeChecked,
+}) {
   const imgURL = imgUtils(image);
 
-  const dispatch = useContext(IsAllActiveDispatchContext);
-
-  function handleCLick() {
-    dispatch({
-      type: FILTERS__TYPE.isActiveIdFilm,
-      id: id,
-    });
+  const token = JSON.parse(Cookies.get("token"));
+  async function addOrDelFilm() {
+    onChangeChecked(!checked, id);
+    await apiAddFavorite(token, id, !checked);
   }
 
   return (
     <Card sx={{ textAlign: "left", width: 450, height: 400, margin: "5px" }}>
-      <Link to="/activeFilm" onClick={handleCLick}>
+      <Link to={`/${id}`}>
         <CardActionArea>
           <CardMedia component="img" height="300" image={imgURL} alt={title} />
         </CardActionArea>
@@ -41,9 +47,13 @@ export default function MultiActionAreaCard({ title, rating, image, id }) {
           </Typography>
         </Box>
         <CardActions>
-          <IconButton size="small" color="primary">
-            <StarOutline />
-          </IconButton>
+          <Checkbox
+            {...label}
+            icon={<BookmarkBorderIcon />}
+            checkedIcon={<BookmarkIcon />}
+            checked={checked}
+            onChange={addOrDelFilm}
+          />
         </CardActions>
       </CardContent>
     </Card>

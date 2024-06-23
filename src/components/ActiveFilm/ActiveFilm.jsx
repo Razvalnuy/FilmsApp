@@ -1,6 +1,7 @@
 import {
   Box,
   CardMedia,
+  Checkbox,
   Container,
   IconButton,
   List,
@@ -13,19 +14,32 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ArrowBack, Star } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Header from "../Header/Header";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { apiDetailsFilm } from "../../fetchs/apiDetailsFilm";
-import { useContext, useEffect, useState } from "react";
-import { TokenContext } from "../../contexts/tokenContext";
-import { IsAllActiveContext } from "../../contexts/isActiveContext";
-import { imgUtils } from "../../utils/utils";
+import { useEffect, useState } from "react";
+import { checkFavorit, imgUtils } from "../../utils/utils";
+import Cookies from "js-cookie";
+import { apiGetFavorit } from "../../fetchs/apiGetFavorit";
+import { apiAddFavorite } from "../../fetchs/apiAddFavorite";
 
 export default function ActiveFilm() {
-  const token = useContext(TokenContext);
+  const token = JSON.parse(Cookies.get("token"));
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+  const { activeFilmId } = useParams();
+
   const [detailsFilm, setDetailsFilm] = useState({});
-  const { isActiveIdFilm } = useContext(IsAllActiveContext);
+  const [activeFavorit, setActiveFavorit] = useState(false);
+
+  async function addOrDelFilm() {
+    await apiAddFavorite(token, activeFilmId, !activeFavorit);
+    setActiveFavorit(!activeFavorit);
+  }
+
   const {
     title,
     release_date,
@@ -43,14 +57,17 @@ export default function ActiveFilm() {
   useEffect(() => {
     try {
       async function getDetailsFetch() {
-        const getDetails = await apiDetailsFilm(token, isActiveIdFilm);
+        const getDetails = await apiDetailsFilm(token, activeFilmId);
         setDetailsFilm(getDetails);
+        const { results } = await apiGetFavorit(token);
+
+        setActiveFavorit(checkFavorit(results, activeFilmId));
       }
       getDetailsFetch();
     } catch (err) {
       console.warn("err", err);
     }
-  }, [isActiveIdFilm, token]);
+  }, [activeFilmId, token]);
 
   const imgURL = imgUtils(detailsFilm);
 
@@ -84,9 +101,14 @@ export default function ActiveFilm() {
                   {title}
                 </Typography>
 
-                <IconButton sx={{ marginLeft: "25px" }}>
-                  <Star sx={{ fontSize: "40px" }} />
-                </IconButton>
+                <Checkbox
+                  sx={{ marginLeft: "25px" }}
+                  {...label}
+                  icon={<BookmarkBorderIcon />}
+                  checkedIcon={<BookmarkIcon />}
+                  checked={activeFavorit}
+                  onChange={addOrDelFilm}
+                />
               </Box>
               <Box>
                 <Link to="/main">
@@ -147,7 +169,7 @@ export default function ActiveFilm() {
                         </TableCell>
                         <TableCell>
                           {production_companies
-                            ? production_companies[0].name
+                            ? production_companies[0]?.name
                             : ""}
                         </TableCell>
                         <TableCell>

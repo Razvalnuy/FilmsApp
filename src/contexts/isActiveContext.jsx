@@ -8,8 +8,6 @@ import {
 const IsAllActiveContext = createContext(null);
 const IsAllActiveDispatchContext = createContext(null);
 
-export { IsAllActiveContext, IsAllActiveDispatchContext };
-
 export function FiltersProvider({ children }) {
   const [isActive, dispatch] = useReducer(filtersReducer, defaultFilterStates);
 
@@ -46,6 +44,7 @@ export function filtersReducer(isActive, action) {
       };
     }
     case FILTERS__TYPE.updateCurrentPage: {
+      console.log("working!");
       return {
         ...isActive,
         isActiveCurrentPage: action.value,
@@ -64,9 +63,23 @@ export function filtersReducer(isActive, action) {
         isActiveIdFilm: action.id,
       };
     }
+    case FILTERS__TYPE.isActiveSearch: {
+      return {
+        ...isActive,
+        movieName: action.search,
+      };
+    }
+    case FILTERS__TYPE.isActivefilmsList: {
+      return {
+        ...isActive,
+        filmsList: action.filmsList,
+      };
+    }
 
     default: {
       console.warn("Unknow action type...");
     }
   }
 }
+
+export { IsAllActiveContext, IsAllActiveDispatchContext };

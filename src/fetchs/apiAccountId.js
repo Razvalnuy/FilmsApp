@@ -1,6 +1,6 @@
 import { urlOptins } from "../utils/utils";
 
-export const fetchGenres = async (token) => {
+export const apiAccountId = async (token) => {
   const options = {
     method: "GET",
     headers: {
@@ -9,17 +9,16 @@ export const fetchGenres = async (token) => {
     },
   };
   try {
-    const { genre, movie, ru, basisURL, list } = urlOptins;
+    const { basisURL, account, accountId } = urlOptins;
     const response = await fetch(
-      `${basisURL}/${genre}/${movie}/${list}?${ru}`,
+      `${basisURL}/${account}/${accountId}`,
       options
     );
 
     if (response.ok) {
       const data = await response.json();
+		console.log(`Верно!`)
       return data;
-    } else {
-      console.log("Вы не авторизавоны!!! *чтобы получить жанры");
     }
   } catch (err) {
     console.log("errFetch", err);

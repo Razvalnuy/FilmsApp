@@ -8,12 +8,12 @@ export default function Header({ titleFilm }) {
     <>
       <AppBar position="fixed" sx={{ overflow: "hidden" }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             {titleFilm ? "Фильмы - " + titleFilm : "Фильмы"}
           </Typography>
           <Link to="/getToken">
             <IconButton>
-              <AccountCircle sx={{ color: "white" }} />
+              <AccountCircle sx={{ color: "white" }} fontSize="large" />
             </IconButton>
           </Link>
         </Toolbar>

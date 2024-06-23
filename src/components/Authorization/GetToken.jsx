@@ -7,20 +7,22 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
-export function GetToken() {
+export default function GetToken() {
   const [open, setOpen] = useState(true);
   const [text, setText] = useState("");
 
   const handleClose = () => {
     setOpen(false);
-    console.log(
-      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3M2M1ZDI3Y2UzMGNhYjJiYWEwYTBiN2MxMGM2NDc2YSIsInN1YiI6IjY2M2JmNjQ3MWEzZDAyYTE0MDc4MDUwMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2grBVV_YHSHRbl1ouPqOvXu5w3-HV5FjJ2Y5HMbXy0s"
-    );
   };
+
+  function changeText(event) {
+    setText(event.target.value);
+  }
 
   return (
     <Fragment>
       <Dialog
+        fullWidth={true}
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -36,7 +38,7 @@ export function GetToken() {
         }}
       >
         <DialogTitle>Запросить токен</DialogTitle>
-        <DialogContent sx={{ width: "500px" }}>
+        <DialogContent>
           <TextField
             autoFocus
             margin="dense"
@@ -47,7 +49,7 @@ export function GetToken() {
             fullWidth
             value={text}
             variant="standard"
-            onChange={(event) => setText(event.target.value)}
+            onChange={changeText}
           />
         </DialogContent>
         <DialogActions>

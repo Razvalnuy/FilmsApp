@@ -1,13 +1,13 @@
 import { urlOptins } from "../utils/utils";
 
 export const apiDetailsFilm = (token, id) => {
-	const options = {
-		method: "GET",
-		headers: {
-		  accept: "application/json",
-		  Authorization: `Bearer ${token}`,
-		},
-	 };
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   try {
     const getSortFilms = async () => {
