@@ -1,5 +1,4 @@
-import Cookies from "js-cookie";
-import { urlOptins } from "../utils/utils";
+// import { urlOptins } from "../utils/utils";
 
 export const apiSearchMovies = (token, currentPage, movieName) => {
   const options = {

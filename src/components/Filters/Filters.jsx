@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Close, Star } from "@mui/icons-material";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import RangeSlider from "../RangeSlider/RangeSlider";
 import CheckboxesTags from "../CheckboxesTags/CheckboxesTags";
 import BasicSelect from "../BasicSelect/BasicSelect";
@@ -16,7 +16,7 @@ import {
   IsAllActiveContext,
   IsAllActiveDispatchContext,
 } from "../../contexts/isActiveContext";
-import { FILTERS__TYPE } from "../../utils/utils";
+import { FILTERS__TYPE, defaultCurrentPage } from "../../utils/utils";
 import { apiGetFavorit } from "../../fetchs/apiGetFavorit";
 import Cookies from "js-cookie";
 import { apiSearchMovies } from "../../fetchs/apiSearchMovies";
@@ -25,10 +25,10 @@ export default function Filters() {
   const isActive = useContext(IsAllActiveContext);
   const dispatch = useContext(IsAllActiveDispatchContext);
   const token = JSON.parse(Cookies.get("token"));
-
+  const [text, setText] = useState("");
   async function getFavorite() {
     const listFavorit = await apiGetFavorit(token);
-    console.log("userListFavorit", listFavorit);
+	 console.log('Избранные фильмы: ', listFavorit);
   }
 
   return (
@@ -55,6 +55,12 @@ export default function Filters() {
               dispatch({
                 type: FILTERS__TYPE.resetFilters,
               });
+				  dispatch({
+					type: FILTERS__TYPE.updateSelect,
+					indexSelect: 1
+				 });
+              setText("");
+  
             }}
           >
             <Close />
@@ -74,24 +80,24 @@ export default function Filters() {
               variant="standard"
               placeholder="Название фильма"
               fullWidth
-              value={isActive.movieName}
+              value={text}
               onChange={(event) => {
-                dispatch({
-                  type: FILTERS__TYPE.isActiveSearch,
-                  search: event.target.value,
-                });
+                setText(event.target.value);
               }}
             />
             <Button
-              disabled={!isActive.movieName.trim()}
+              disabled={!text.trim()}
               variant="contained"
               onClick={async () => {
+                dispatch({
+                  type: FILTERS__TYPE.isActiveSearch,
+                  search: text,
+                });
                 const movieSearchList = await apiSearchMovies(
                   token,
-                  1,
-                  isActive.movieName
+                  defaultCurrentPage,
+                  text
                 );
-                console.log("movieSearchList", movieSearchList);
                 dispatch({
                   type: FILTERS__TYPE.isActivefilmsList,
                   filmsList: movieSearchList.results,
@@ -137,16 +143,17 @@ export default function Filters() {
                 value: value,
               });
 
-              const movieSearchList = await apiSearchMovies(
-                token,
-                value,
-                isActive.movieName
-              );
-              console.log("movieSearchList", movieSearchList);
-              dispatch({
-                type: FILTERS__TYPE.isActivefilmsList,
-                filmsList: movieSearchList.results,
-              });
+              if (isActive.movieName) {
+                const movieSearchList = await apiSearchMovies(
+                  token,
+                  value,
+                  isActive.movieName
+                );
+                dispatch({
+                  type: FILTERS__TYPE.isActivefilmsList,
+                  filmsList: movieSearchList.results,
+                });
+              }
             }}
           />
         </Box>

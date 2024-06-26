@@ -4,6 +4,7 @@ import {
   IsAllActiveContext,
   IsAllActiveDispatchContext,
 } from "../../contexts/isActiveContext";
+
 import { apiFilmsSort } from "../../fetchs/apiFilmsSort";
 import { FILTERS__TYPE } from "../../utils/utils";
 import MultiActionAreaCard from "../FilmCard/FilmCard";
@@ -29,8 +30,8 @@ export function Main() {
 
   useEffect(() => {
     try {
-      if (isActive.movieName) {
-			console.log('Нахоуй вывод');
+      if (isActive.movieName !== "") {
+        console.log("Поиск по запросу");
       } else {
         async function getFilms() {
           const { results, total_pages } = await apiFilmsSort(
@@ -62,15 +63,22 @@ export function Main() {
               type: FILTERS__TYPE.isActivefilmsList,
               filmsList: newResults,
             });
-            console.log("allFilms", isActive.filmsList);
           }
+          console.log("allFilms", newResults);
         }
         getFilms();
       }
     } catch (err) {
       console.log("errFetchFilmsSort", err);
     }
-  }, [token, isActive.isActiveSelect, isActive.isActiveCurrentPage, dispatch]);
+  }, [
+    token,
+    isActive.isActiveSelect,
+    isActive.isActiveCurrentPage,
+    dispatch,
+    isActive.movieName,
+	 isActive.isActiveTotalPages
+  ]);
 
   return (
     <>

@@ -44,7 +44,6 @@ export function filtersReducer(isActive, action) {
       };
     }
     case FILTERS__TYPE.updateCurrentPage: {
-      console.log("working!");
       return {
         ...isActive,
         isActiveCurrentPage: action.value,

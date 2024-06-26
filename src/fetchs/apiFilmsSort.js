@@ -1,9 +1,8 @@
 import Cookies from "js-cookie";
 import { urlOptins } from "../utils/utils";
 
-export const apiFilmsSort = async (token, sort = 1, currentPage) => {
+export const apiFilmsSort = async (token, sort, currentPage) => {
   const accountId = JSON.parse(Cookies.get("accountId"));
-
   const options = {
     method: "GET",
     headers: {
@@ -35,7 +34,6 @@ export const apiFilmsSort = async (token, sort = 1, currentPage) => {
 
     if (data.ok) {
       const sortFilms = await data.json();
-      console.log(`sortFilms`, sortFilms);
       return sortFilms;
     } else {
       console.log("Вы не авторизавоны!!! *чтобы получить фильмы");

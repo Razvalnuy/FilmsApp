@@ -41,6 +41,7 @@ const defaultFilterStates = {
   filmsList: [],
 };
 
+const defaultCurrentPage = 1;
 function totalPageUtils(action) {
   return action.totalPages >= 500 ? 500 : action.totalPages;
 }
@@ -59,4 +60,5 @@ export {
   totalPageUtils,
   tokenVerification,
   checkFavorit,
+  defaultCurrentPage,
 };

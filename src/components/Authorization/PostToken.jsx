@@ -23,7 +23,7 @@ export default function PostToken() {
       if (value === tokenVerification) {
         const favorite = async () => {
           const { id } = await apiAccountId(value);
-          Cookies.set("accountId", id);
+          Cookies.set("accountId", JSON.stringify(id));
         };
         favorite();
       }
