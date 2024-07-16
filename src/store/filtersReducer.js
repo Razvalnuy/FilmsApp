@@ -23,7 +23,7 @@ export function filtersReducer(state = defaultStateFilters, action) {
           ...state.filters,
           isActiveSelect: action.indexSelect,
           isActiveCurrentPage: action.value,
-          isActiveSearch: action.search,
+          movieName: action.search,
         },
       };
     }

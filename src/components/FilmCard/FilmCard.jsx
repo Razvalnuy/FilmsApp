@@ -7,10 +7,9 @@ import { Box, CardActionArea, CardActions, Checkbox } from "@mui/material";
 import { Link } from "react-router-dom";
 import { FILTERS__TYPE, imgUtils } from "../../utils/utils";
 import { apiAddFavorite } from "../../fetchs/apiAddFavorite";
-import Cookies from "js-cookie";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -24,10 +23,12 @@ export default function MultiActionAreaCard({
 }) {
   const imgURL = imgUtils(image);
 
-  const token = JSON.parse(Cookies.get("token"));
+  const token = useSelector((state) => state.user.user.token);
+  const accountId = useSelector((state) => state.user.user.id);
+
   async function addOrDelFilm() {
     onChangeChecked(!checked, id);
-    await apiAddFavorite(token, id, !checked);
+    await apiAddFavorite(token, id, !checked, accountId);
   }
 
   const dispatch = useDispatch();

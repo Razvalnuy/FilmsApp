@@ -6,18 +6,17 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { useEffect, useState } from "react";
 import { FILTERS__TYPE } from "../../utils/utils";
 import { fetchGenres } from "../../fetchs/apiGenres";
-import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function CheckboxesTags() {
-  const token = JSON.parse(Cookies.get("token"));
+  const token = useSelector((state) => state.user.user.token);
 
   const [genres, setGenres] = useState([]);
 
-  const filtersState = useSelector((state) => state.filters);
+  const filtersState = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
 
   useEffect(() => {

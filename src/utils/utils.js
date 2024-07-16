@@ -41,6 +41,18 @@ const defaultFilterStates = {
   filmsList: [],
 };
 
+const emptyUserState = {
+  token: "",
+  id: 0,
+};
+
+const emptyActiveFilmsState = [];
+
+const USER_TYPE = {
+  id: "id",
+  token: "token",
+};
+
 const defaultCurrentPage = 1;
 function totalPageUtils(action) {
   return action.totalPages >= 500 ? 500 : action.totalPages;
@@ -61,4 +73,7 @@ export {
   tokenVerification,
   checkFavorit,
   defaultCurrentPage,
+  emptyUserState,
+  USER_TYPE,
+  emptyActiveFilmsState,
 };

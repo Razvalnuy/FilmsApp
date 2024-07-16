@@ -22,22 +22,25 @@ import { Link } from "react-router-dom";
 import { apiDetailsFilm } from "../../fetchs/apiDetailsFilm";
 import { useEffect, useState } from "react";
 import { checkFavorit, imgUtils } from "../../utils/utils";
-import Cookies from "js-cookie";
 import { apiGetFavorit } from "../../fetchs/apiGetFavorit";
 import { apiAddFavorite } from "../../fetchs/apiAddFavorite";
 import { useSelector } from "react-redux";
 
 export default function ActiveFilm() {
-  const token = JSON.parse(Cookies.get("token"));
+  const token = useSelector((state) => state.user.user.token);
+  const accountId = useSelector((state) => state.user.user.id);
+
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-  const activeFilmId = useSelector((state) => state.filters.isActiveIdFilm);
+  const activeFilmId = useSelector(
+    (state) => state.filters.filters.isActiveIdFilm
+  );
 
   const [detailsFilm, setDetailsFilm] = useState({});
   const [activeFavorit, setActiveFavorit] = useState(false);
 
   async function addOrDelFilm() {
-    await apiAddFavorite(token, activeFilmId, !activeFavorit);
+    await apiAddFavorite(token, activeFilmId, !activeFavorit, accountId);
     setActiveFavorit(!activeFavorit);
   }
 

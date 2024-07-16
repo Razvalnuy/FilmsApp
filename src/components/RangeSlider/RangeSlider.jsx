@@ -10,7 +10,7 @@ function valuetext(value) {
 }
 
 export default function RangeSlider() {
-  const filtersState = useSelector((state) => state.filters);
+  const filtersState = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {

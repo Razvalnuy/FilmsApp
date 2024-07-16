@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function BasicSelect() {
   const sort = ["Популярности", "Рейтинг", "Избранные"];
 
-  const filtersState = useSelector((state) => state.filters);
+  const filtersState = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
 
   const handleChange = (event) => {

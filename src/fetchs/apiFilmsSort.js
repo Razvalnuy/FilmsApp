@@ -1,8 +1,7 @@
-import Cookies from "js-cookie";
 import { urlOptins } from "../utils/utils";
 
-export const apiFilmsSort = async (token, sort, currentPage) => {
-  const accountId = JSON.parse(Cookies.get("accountId"));
+export const apiFilmsSort = async (token, sort, currentPage, accountId) => {
+
   const options = {
     method: "GET",
     headers: {

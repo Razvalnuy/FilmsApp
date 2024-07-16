@@ -1,7 +1,6 @@
-import Cookies from "js-cookie";
 import { urlOptins } from "../utils/utils";
 
-export const apiAddFavorite = (token, id, addOrDel) => {
+export const apiAddFavorite = (token, id, addOrDel, accountId) => {
   const { basisURL, account, favorite, movie } = urlOptins;
 
   const options = {
@@ -20,7 +19,6 @@ export const apiAddFavorite = (token, id, addOrDel) => {
 
   try {
     const getSortFilms = async () => {
-      const accountId = JSON.parse(Cookies.get("accountId"));
       const data = await fetch(
         `${basisURL}/${account}/${accountId}/${favorite}`,
         options

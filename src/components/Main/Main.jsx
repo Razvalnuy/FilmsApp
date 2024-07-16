@@ -6,14 +6,14 @@ import { FILTERS__TYPE } from "../../utils/utils";
 import MultiActionAreaCard from "../FilmCard/FilmCard";
 import Filters from "../Filters/Filters";
 import Header from "../Header/Header";
-import Cookies from "js-cookie";
 import { apiGetFavorit } from "../../fetchs/apiGetFavorit";
 import { useDispatch, useSelector } from "react-redux";
 
 export function Main() {
-  const filtersState = useSelector((state) => state.filters);
+  const filtersState = useSelector((state) => state.filters.filters);
+  const token = useSelector((state) => state.user.user.token);
+  const accountId = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
-  const token = JSON.parse(Cookies.get("token"));
 
   function changeChecked(checked, id) {
     const updatedFilmsList = filtersState.filmsList.map((movie) => {
@@ -28,22 +28,19 @@ export function Main() {
   useEffect(() => {
     try {
       if (filtersState.movieName !== "") {
-        console.log("Поиск по запросу");
       } else {
         async function getFilms() {
           const { results, total_pages } = await apiFilmsSort(
             token,
             filtersState.isActiveSelect,
-            filtersState.isActiveCurrentPage
+            filtersState.isActiveCurrentPage,
+            accountId
           );
           const newResults = results.map((movie) => ({
             ...movie,
             checked: false,
           }));
-          const getFavorits = await apiGetFavorit(
-            token,
-            filtersState.isActiveCurrentPage
-          );
+          const getFavorits = await apiGetFavorit(token, accountId);
 
           newResults.filter(async (movie) => {
             getFavorits.results.some((favorit) => {
@@ -61,7 +58,6 @@ export function Main() {
               filmsList: newResults,
             });
           }
-          console.log("allFilms", newResults);
         }
         getFilms();
       }

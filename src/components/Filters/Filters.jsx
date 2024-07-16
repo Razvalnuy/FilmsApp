@@ -14,15 +14,14 @@ import CheckboxesTags from "../CheckboxesTags/CheckboxesTags";
 import BasicSelect from "../BasicSelect/BasicSelect";
 import { FILTERS__TYPE, defaultCurrentPage } from "../../utils/utils";
 import { apiGetFavorit } from "../../fetchs/apiGetFavorit";
-import Cookies from "js-cookie";
 import { apiSearchMovies } from "../../fetchs/apiSearchMovies";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Filters() {
-  const filtersState = useSelector((state) => state.filters);
+  const filtersState = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
 
-  const token = JSON.parse(Cookies.get("token"));
+  const token = useSelector((state) => state.user.user.token);
   async function getFavorite() {
     const listFavorit = await apiGetFavorit(token);
     console.log("Избранные фильмы: ", listFavorit);
@@ -88,7 +87,7 @@ export default function Filters() {
                   type: FILTERS__TYPE.isActivefilmsList,
                   filmsList: movieSearchList.results,
                 });
-					 dispatch({
+                dispatch({
                   type: FILTERS__TYPE.updateTotalPage,
                   totalPages: movieSearchList.total_pages,
                 });
